@@ -1,0 +1,11 @@
+services:
+  nginx-secure:
+    build: .
+    image: my-nginx-secure:1.0.0
+    container_name: nginx-secure
+    restart: always
+    ports:
+      - "80:8080"
+      - "443:8443"
+    volumes:
+      - ./html:/usr/share/nginx/html:ro

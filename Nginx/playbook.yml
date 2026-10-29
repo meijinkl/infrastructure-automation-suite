@@ -1,0 +1,79 @@
+---
+- name: Configure nginx web server
+  hosts: webservers
+  become: true
+  gather_facts: true
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Install nginx package
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Deploy nginx site configuration from template
+      ansible.builtin.template:
+        src: templates/nginx_site.conf.j2
+        dest: "/etc/nginx/sites-available/{{ nginx_site_name }}.conf"
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Reload nginx
+
+    - name: Ensure site symlink exists in sites-enabled
+      ansible.builtin.file:
+        src: "/etc/nginx/sites-available/{{ nginx_site_name }}.conf"
+        dest: "/etc/nginx/sites-enabled/{{ nginx_site_name }}.conf"
+        state: link
+      notify: Reload nginx
+
+    - name: Remove nginx default site
+      ansible.builtin.file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: Reload nginx
+
+    - name: Deploy static index page
+      ansible.builtin.copy:
+        content: "{{ nginx_index_content }}\n"
+        dest: "{{ nginx_root }}/index.html"
+        owner: www-data
+        group: www-data
+        mode: "0644"
+
+    - name: Validate nginx configuration syntax
+      ansible.builtin.command:
+        cmd: nginx -t
+      register: nginx_test
+      changed_when: false
+      failed_when: nginx_test.rc != 0
+
+    - name: Flush handlers so nginx is reloaded BEFORE we check availability
+      ansible.builtin.meta: flush_handlers
+
+    - name: Ensure nginx is running and enabled on boot
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Verify nginx responds on port {{ nginx_port }}
+      ansible.builtin.uri:
+        url: "http://127.0.0.1:{{ nginx_port }}/"
+        method: GET
+        status_code: 200
+        return_content: true
+      register: nginx_check
+      retries: 5
+      delay: 2
+      until: nginx_check.status == 200
+      changed_when: false
+
+  handlers:
+    - name: Reload nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
