@@ -28,5 +28,6 @@ deploy_app:
     - sed -i "s|my-nginx-secure:1.0.0|$IMAGE_TAG|g" docker-compose.yml
     - docker compose up -d
     - sleep 5
+    - docker compose ps
     - docker compose logs
-    - curl -vk https://docker:443
+    - curl -4 -vk https://docker:443
