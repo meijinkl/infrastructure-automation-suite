@@ -1,4 +1,4 @@
-FROM nginx:1.25.3-alpine
+FROM nginx:1.27-alpine
 
 RUN sed -i 's|pid        /var/run/nginx.pid;|pid        /tmp/nginx.pid;|' /etc/nginx/nginx.conf && \
     sed -i 's/^user  nginx;/#user  nginx;/' /etc/nginx/nginx.conf
