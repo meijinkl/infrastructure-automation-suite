@@ -23,11 +23,10 @@ jobs:
         run: |
           cd Docker
           docker compose up -d
-          echo "Ждем запуска Nginx..."
-          sleep 10
+          sleep 5
           echo "СТАТУС КОНТЕЙНЕРА"
           docker compose ps
-          echo "ЛОГИ (если упал)"
+          echo "ЛОГИ КОНТЕЙНЕРА"
           docker compose logs
           echo "ТЕСТ CURL"
-          curl -k -v --http1.1 https://localhost:443
+          curl -4 -vk https://localhost:443
