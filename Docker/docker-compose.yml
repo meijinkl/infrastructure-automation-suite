@@ -1,6 +1,7 @@
+version: '3.8'
+
 services:
-  nginx-secure:
-    build: .
+  nginx:
     image: my-nginx-secure:1.0.0
     container_name: nginx-secure
     restart: always
