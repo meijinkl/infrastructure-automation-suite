@@ -1,5 +1,7 @@
 # Infrastructure Automation Suite
 
+[![CI/CD Pipeline](https://github.com/meijinkl/infrastructure-automation-suite/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/meijinkl/infrastructure-automation-suite/actions/workflows/ci-cd.yml)
+
 Комплексный проект, демонстрирующий навыки автоматизации инфраструктуры, контейнеризации, написания Bash-скриптов и настройки CI/CD пайплайнов.
 
 ## Стек технологий
