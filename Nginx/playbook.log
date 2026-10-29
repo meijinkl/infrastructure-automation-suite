@@ -1,0 +1,36 @@
+
+PLAY [Configure nginx web server] **********************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [localhost]
+
+TASK [Install nginx package] ***************************************************
+changed: [localhost]
+
+TASK [Deploy nginx site configuration from template] ***************************
+changed: [localhost]
+
+TASK [Ensure site symlink exists in sites-enabled] *****************************
+changed: [localhost]
+
+TASK [Remove nginx default site] ***********************************************
+changed: [localhost]
+
+TASK [Deploy static index page] ************************************************
+changed: [localhost]
+
+TASK [Validate nginx configuration syntax] *************************************
+ok: [localhost]
+
+RUNNING HANDLER [Reload nginx] *************************************************
+changed: [localhost]
+
+TASK [Ensure nginx is running and enabled on boot] *****************************
+ok: [localhost]
+
+TASK [Verify nginx responds on port 80] ****************************************
+ok: [localhost]
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=10   changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
