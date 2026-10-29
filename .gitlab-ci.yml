@@ -25,12 +25,8 @@ deploy_app:
     - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
     - apk add --no-cache curl
     - cd Docker
-    - |
-      sed -i "s|my-nginx-secure:1.0.0|$IMAGE_TAG|g" docker-compose.yml
+    - sed -i "s|my-nginx-secure:1.0.0|$IMAGE_TAG|g" docker-compose.yml
     - docker compose up -d
     - sleep 5
-    # ДИАГНОСТИКА: проверяем, запустился ли контейнер и смотрим его логи
-    - docker compose ps
     - docker compose logs
-    # ИСПРАВЛЕНИЕ: используем имя сервиса 'docker' вместо localhost
     - curl -vk https://docker:443
