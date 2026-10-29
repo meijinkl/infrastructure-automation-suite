@@ -23,9 +23,10 @@ deploy_app:
     - docker:24-dind
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+    - apk add --no-cache curl   # <--- ВОТ ЭТА СТРОЧКА УСТАНАВЛИВАЕТ CURL
     - cd Docker
     - |
       sed -i "s|my-nginx-secure:1.0.0|$IMAGE_TAG|g" docker-compose.yml
     - docker compose up -d
     - sleep 5
-    - curl -k https://localhost:443
+    - curl -vk https://localhost:443
